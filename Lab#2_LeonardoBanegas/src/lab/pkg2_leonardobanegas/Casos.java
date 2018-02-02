@@ -10,6 +10,7 @@ public class Casos {
     private String detACargo;
     private String estado;
     private ArrayList<Evidencia> evi = new ArrayList();
+    private Evidencia e = new Evidencia();
 
     public Casos(String lugar, String descripcion, String tipo, String detACargo, String estado, String nombre, String des, String niveldePeligro) {
         this.lugar = lugar;
@@ -17,7 +18,7 @@ public class Casos {
         this.tipo = tipo;
         this.detACargo = detACargo;
         this.estado = estado;
-        evi.add(new Evidencia(lugar, descripcion, tipo));
+        evi.add(new Evidencia(nombre, des, niveldePeligro));
 
     }
 
@@ -77,9 +78,11 @@ public class Casos {
         this.evi = evi;
     }
 
-    /*public void setEvi(String nombre, String des, String niveldePeligro) {
-        evi.add(new Evidencia(nombre, des, niveldePeligro));
-    }*/
+    public void setEvi(String nombre, String des, String niveldePeligro) {
+        e.setDescripcion(descripcion);
+        e.setNombre(nombre);
+        e.setNivelPeligro(niveldePeligro);
+    }
     @Override
     public String toString() {
         return "Casos{" + "lugar=" + lugar + ", descripcion=" + descripcion + ", tipo=" + tipo + ", detACargo=" + detACargo + ", estado=" + estado + ", evi=" + evi + '}';

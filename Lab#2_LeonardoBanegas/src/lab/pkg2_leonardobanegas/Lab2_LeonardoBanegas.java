@@ -7,10 +7,14 @@ public class Lab2_LeonardoBanegas {
 
     private Scanner sc = new Scanner(System.in);
     private ArrayList<Detective> det = new ArrayList();
+    private ArrayList<Casos> casosresueltos = new ArrayList();
+    private ArrayList<Casos> casospendientes = new ArrayList();
     private int cont = 0;
     private int pos = 0;
     private Detective a;
     private Detective b;
+    private Casos casos;
+    private Casos cas;
 
     public static void main(String[] args) {
         new Lab2_LeonardoBanegas();
@@ -23,7 +27,8 @@ public class Lab2_LeonardoBanegas {
             System.out.println("1) Agregar Detectives\n"
                     + "2) Modificar Detectives\n"
                     + "3) Eliminar Detectives\n"
-                    + "4) Log In\n");
+                    + "4) Log In\n"
+                    + "5) Exit\n");
             opcion = sc.nextInt();
             switch (opcion) {
                 case 1:
@@ -39,8 +44,6 @@ public class Lab2_LeonardoBanegas {
                     logIn();
                     break;
                 case 5:
-                    break;
-                case 6:
                     System.exit(0);
                 default:
                     System.out.println("ERROR!!");
@@ -127,24 +130,26 @@ public class Lab2_LeonardoBanegas {
         System.out.println("Ingrese su contraseña: ");
         String contra = sc.next();
         for (int i = 0; i < det.size(); i++) {
-            if ((det.get(i).getUsuario() == usuario) && (det.get(i).getContra() == contra)) {
+            if ((det.get(i).getUsuario().equals(usuario)) && (det.get(i).getContra().equals(contra))) {
+                System.out.println("gay");
                 a = det.get(i);
                 login = true;
             }
         }
         while (login == true) {
-            System.out.println("Bienvenido " + b.getNombre());
+            System.out.println("Bienvenido " + a.getNombre());
             char resp = 's';
             while (resp == 's' || resp == 'S') {
                 int opcion = 0;
                 System.out.println("1) Modificar mis Datos\n"
                         + "2) Listar Mis Datos\n"
-                        + "3) Registrar Casos\n"
-                        + "4) Modificar Casos\n"
-                        + "4) Listar Casos\n"
-                        + "5) Enviar Mensaje\n"
-                        + "6) Listar Mensajes\n"
-                        + "7) Log Out");
+                        + "3) Listar Casos\n"
+                        + "4) Registrar Casos\n"
+                        + "5) Modificar Casos\n"
+                        + "6) Enviar Mensaje\n"
+                        + "7) Listar Mensajes\n"
+                        + "8) Listar Casos Resueltos y En Proceso"
+                        + "9) Log Out");
                 opcion = sc.nextInt();
                 switch (opcion) {
                     case 1:
@@ -154,16 +159,25 @@ public class Lab2_LeonardoBanegas {
                         listarMisDatos();
                         break;
                     case 3:
-                        registrarCasos();
+                        listarCasos();
                         break;
                     case 4:
-                        logIn();
+                        registrarCasos();
                         break;
                     case 5:
+                        modificarMisCasos();
                         break;
                     case 6:
+                        enviarMensaje();
                         break;
                     case 7:
+                        listarMensajes();
+                        break;
+                    case 8:
+                        listarCasosREyEN();
+                        break;
+                    case 9:
+                        System.out.println("Volviendo al Menu Principal");
                         System.exit(0);
                     default:
                         System.out.println("ERROR!!");
@@ -285,7 +299,7 @@ public class Lab2_LeonardoBanegas {
             String niveldePeligro = "";
             int op2 = sc.nextInt();
             if (op2 == 1) {
-                niveldePeligro = "En Alto";
+                niveldePeligro = "Alto";
             } else if (op2 == 2) {
                 niveldePeligro = "Medio";
             } else if (op2 == 3) {
@@ -308,27 +322,221 @@ public class Lab2_LeonardoBanegas {
                     }
                 }
             }
+            if (estado == "En Proceso") {
+                casospendientes.add(new Casos(lugar, descripcion, tipo, detACargo, estado, nombre, des, niveldePeligro));
+            }
+            if (estado == "Resuelto") {
+                casosresueltos.add(new Casos(lugar, descripcion, tipo, detACargo, estado, nombre, des, niveldePeligro));
+            }
+
             a.getCasos().add(new Casos(lugar, descripcion, tipo, detACargo, estado, nombre, des, niveldePeligro));
         } else {
+            if (estado == "En Proceso") {
+                casospendientes.add(new Casos(lugar, descripcion, tipo, detACargo, estado));
+            }
+            if (estado == "Resuelto") {
+                casosresueltos.add(new Casos(lugar, descripcion, tipo, detACargo, estado));
+            }
             a.getCasos().add(new Casos(lugar, descripcion, tipo, detACargo, estado));
         }
 
     }
-}
 
-/*switch (opcion) {
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
-                case 6:
-                    System.exit(0);
-                default:
-                    System.out.println("ERROR!!");
-            }*/
+    private void modificarMisCasos() {
+        int c = 1;
+        for (int i = 0; i < a.getCasos().size(); i++) {
+            System.out.println(c + ") " + a.getCasos().get(i));
+            c++;
+        }
+        System.out.println("Elija Caso a Modificar");
+        pos = sc.nextInt() - 1;
+        casos = a.getCasos().get(pos);
+
+        System.out.println("Ingrese Lugar: ");
+        casos.setLugar(sc.next());
+        System.out.println("Ingrese Descripcion: ");
+        casos.setDescripcion(sc.next());
+        System.out.println("Ingrese tipo: ");
+        System.out.println("1) Homicidio");
+        System.out.println("2) Robo");
+        System.out.println("3) Secuestro");
+        System.out.println("4) Violacion");
+        int op = sc.nextInt();
+        if (op == 1) {
+            casos.setTipo("Homicidio");
+        } else if (op == 2) {
+            casos.setTipo("Robo");
+        } else if (op == 3) {
+            casos.setTipo("Secuestro");
+        } else if (op == 4) {
+            casos.setTipo("Violacion");
+        } else {
+            while (op < 1 || op > 4) {
+                System.out.println("ERROR");
+                System.out.println("Ingrese categoria: ");
+                System.out.println("1) Homicidio");
+                System.out.println("2) Robo");
+                System.out.println("3) Secuestro");
+                System.out.println("4) Violacion");
+                op = sc.nextInt();
+                if (op == 1) {
+                    casos.setTipo("Homicidio");
+                } else if (op == 2) {
+                    casos.setTipo("Robo");
+                } else if (op == 3) {
+                    casos.setTipo("Secuestro");
+                } else if (op == 4) {
+                    casos.setTipo("Violacion");
+                }
+            }
+        }
+        System.out.println("Ingrese Detective a Cargo: ");
+        casos.setDetACargo(sc.next());
+        System.out.println("Ingrese Estado: ");
+        System.out.println("1) En Proceso");
+        System.out.println("2) Resuelto");
+        int op1 = sc.nextInt();
+        if (op1 == 1) {
+            casos.setEstado("En Proceso");
+        } else if (op1 == 2) {
+            casos.setEstado("Resuelto");
+        } else {
+            while (op1 < 1 || op1 > 2) {
+                System.out.println("ERROR");
+                System.out.println("Ingrese categoria: ");
+                System.out.println("1) En Proceso");
+                System.out.println("2) Resuelto");
+                op1 = sc.nextInt();
+                if (op1 == 1) {
+                    casos.setEstado("En Proceso");
+                } else if (op1 == 2) {
+                    casos.setEstado("Resuelto");
+                }
+            }
+        }
+        System.out.println("Desea Agregar Evidencia?[s/n]");
+        char respevi = sc.next().charAt(0);
+        if (respevi == 's' || respevi == 'S') {
+            System.out.println("Ingrese Nombre: ");
+            String nombre = sc.next();
+            System.out.println("Ingrese Descripcion: ");
+            String des = sc.next();
+            System.out.println("Ingrese Nivel de Peligro: ");
+            System.out.println("1) Alto");
+            System.out.println("2) Medio");
+            System.out.println("3) Bajo");
+            String niveldePeligro = "";
+            int op2 = sc.nextInt();
+            if (op2 == 1) {
+                niveldePeligro = "En Alto";
+            } else if (op2 == 2) {
+                niveldePeligro = "Medio";
+            } else if (op2 == 3) {
+                niveldePeligro = "Bajo";
+            } else {
+                while (op2 < 1 || op2 > 3) {
+                    System.out.println("ERROR");
+                    System.out.println("Ingrese categoria: ");
+                    System.out.println("1) Alto");
+                    System.out.println("2) Medio");
+                    System.out.println("3) Bajo");
+                    op2 = sc.nextInt();
+                    if (op2 == 1) {
+                        niveldePeligro = "Alto";
+                    } else if (op2 == 2) {
+                        niveldePeligro = "Medio";
+                    } else if (op2 == 3) {
+                        niveldePeligro = "Bajo";
+                    }
+                }
+            }
+            casos.setEvi(nombre, des, niveldePeligro);
+        }
+    }
+
+    private void listarCasos() {
+        int q = 1;
+        for (int i = 0; i < a.getCasos().size(); i++) {
+            if (a.getCasos().get(i).getTipo().equalsIgnoreCase("Homicidio")) {
+                System.out.println(q + ")" + a.getCasos().get(i));
+                q++;
+            }
+        }
+        for (int i = 0; i < a.getCasos().size(); i++) {
+            if (a.getCasos().get(i).getTipo().equalsIgnoreCase("Secuestros")) {
+                System.out.println(q + ")" + a.getCasos().get(i));
+                q++;
+            }
+        }
+        for (int i = 0; i < a.getCasos().size(); i++) {
+            if (a.getCasos().get(i).getTipo().equalsIgnoreCase("Violacion")) {
+                System.out.println(q + ")" + a.getCasos().get(i));
+                q++;
+            }
+        }
+        for (int i = 0; i < a.getCasos().size(); i++) {
+            if (a.getCasos().get(i).getTipo().equalsIgnoreCase("Robo")) {
+                System.out.println(q + ")" + a.getCasos().get(i));
+                q++;
+            }
+        }
+    }
+
+    private void enviarMensaje() {
+        System.out.println("Lista de Detectives");
+        int f = 1;
+        for (int i = 0; i < det.size(); i++) {
+            System.out.println(f + ")" + det.get(i).getNombre());
+            f++;
+        }
+
+        System.out.println("Seleccione Detectve para Enviar Mensaje");
+        int pos = sc.nextInt() - 1;
+        while (a == b) {
+            System.out.println("Se eligio usted mismo. Intente de nuevo:");
+            System.out.println("Lista de Detectives");
+            f = 1;
+            for (int i = 0; i < det.size(); i++) {
+                System.out.println(f + ")" + det.get(i).getNombre());
+                f++;
+            }
+
+            System.out.println("Seleccione Detectve para Enviar Mensaje");
+            pos = sc.nextInt() - 1;
+        }
+        b = det.get(pos);
+        System.out.println("Ingrese Emisor");
+        String emisor = sc.next();
+        System.out.println("Ingrese Receptor");
+        String receptor = sc.next();
+        System.out.println("Ingrese Contenido");
+        String contenido = sc.next();
+        System.out.println("Ingrese Prioridad");
+        int prioridad = sc.nextInt();
+        b.getMensajes().add(new Mensaje(emisor, receptor, contenido, prioridad));
+    }
+
+    private void listarMensajes() {
+        System.out.println("Lista de Mensajes");
+        int f = 1;
+        for (int i = 0; i < a.getMensajes().size(); i++) {
+            System.out.println(f + ")" + a.getMensajes().get(i));
+            f++;
+        }
+    }
+
+    private void listarCasosREyEN() {
+        System.out.println("Lista de Casos En Proceso");
+        int f = 1;
+        for (int i = 0; i < casospendientes.size(); i++) {
+            System.out.println(f + ")" + casospendientes.get(i));
+            f++;
+        }
+        System.out.println("Lista de Resueltos");
+        f = 1;
+        for (int i = 0; i < casosresueltos.size(); i++) {
+            System.out.println(f + ")" + casosresueltos.get(i));
+            f++;
+        }
+    }
+}

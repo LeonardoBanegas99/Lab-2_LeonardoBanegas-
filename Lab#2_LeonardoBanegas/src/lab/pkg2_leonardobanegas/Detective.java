@@ -76,7 +76,7 @@ public class Detective {
         return casos;
     }
 
-    public void setCasos(ArrayList<Casos> casos) {
+    public void setCasos() {
         this.casos = casos;
     }
 
