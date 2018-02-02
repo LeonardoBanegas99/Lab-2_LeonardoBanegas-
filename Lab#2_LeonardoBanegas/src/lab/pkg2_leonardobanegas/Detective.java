@@ -9,7 +9,7 @@ public class Detective {
     private String nacionalidad;
     private int anoslab;
     private int nivel;
-    private ArrayList<String> casos = new ArrayList();
+    private ArrayList<Casos> casos = new ArrayList();
     private ArrayList<Mensaje> mensajes = new ArrayList();
     private String usuario;
     private String contra;
@@ -27,7 +27,7 @@ public class Detective {
         this.contra = contra;
     }
 
-    public Detective(ArrayList<Mensaje> mensajes, ArrayList<String> casos) {
+    public Detective(ArrayList<Mensaje> mensajes, ArrayList<Casos> casos) {
         this.mensajes = mensajes;
         this.casos = casos;
     }
@@ -72,11 +72,11 @@ public class Detective {
         this.nivel = nivel;
     }
 
-    public ArrayList<String> getCasos() {
+    public ArrayList<Casos> getCasos() {
         return casos;
     }
 
-    public void setCasos(ArrayList<String> casos) {
+    public void setCasos(ArrayList<Casos> casos) {
         this.casos = casos;
     }
 
@@ -106,7 +106,7 @@ public class Detective {
 
     @Override
     public String toString() {
-        return "nombre=" + nombre + ", edad=" + edad + "\nnacionalidad=" + nacionalidad + ", años laborales=" + anoslab + "\nnivel=" + nivel +", usuario=" + usuario + ", contra=" + contra;
+        return "nombre=" + nombre + ", edad=" + edad + "\nnacionalidad=" + nacionalidad + ", años laborales=" + anoslab + "\nnivel=" + nivel + ", usuario=" + usuario + ", contra=" + contra;
     }
 
 }
